@@ -65,6 +65,13 @@ object Lists extends App {
     def foldRight[A,B](l: List[A])(acc: B)(f: (A,B)=>B): B =
       foldRightViaFoldleft(l)(acc)(f)
 
+    @tailrec
+    def contains[A](th: A)(l: List[A]): Boolean = l match {
+      case Cons(h,_) if h == th => true
+      case Cons(_,t) => contains(th)(t)
+      case _ => false
+    }
+
     def filterByFlatmap[A](l: List[A])(f: A => Boolean): List[A] = ???
 
     def appendByFold[A](l1: List[A], l2: List[A]): List[A] = ???
@@ -81,6 +88,11 @@ object Lists extends App {
   println(drop(Cons(10, Cons(20, Cons(30, Nil()))),5)) // Nil()
   println(drop(Nil(), 5)) // Nil()
 
+  //TestContains
+  println(contains(40)(Cons(10, Cons(20, Cons(30, Nil()))))) // false
+  println(contains(20)(Nil())) // false
+  println(contains(30)(Cons(10, Cons(20, Cons(30, Nil()))))) // true
+
   println(map(Cons(10, Cons(20, Nil())))(_+1))       // Cons(11, Cons(21, Nil()))
   println(map(Cons(10, Cons(20, Nil())))(":"+_+":")) // Cons(":10:", Cons(":20:",Nil()))
   println(filter(Cons(10, Cons(20, Nil())))(_>15)) // Cons(20, Nil())
@@ -91,6 +103,7 @@ object Lists extends App {
   println(reverse(lst)) // Cons(5,Cons(1,Cons(7,Cons(3,Nil()))))
   println(foldRightNonTailRec(lst)(0)(_-_)) // -8
   println(foldRightViaFoldleft(lst)(0)(_-_)) // -8
+
 
   // EXERCISES:
   println(filterByFlatmap(Cons(10, Cons(20, Nil())))(_>15)) // Cons(20, Nil())

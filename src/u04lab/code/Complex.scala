@@ -7,17 +7,19 @@ trait Complex {
   def *(c: Complex): Complex // should implement the product of two complex numbers
 }
 
-case class ComplexImpl( val re: Double,
-                   val im: Double) extends Complex {
-  override def +(c: Complex): Complex = Complex(this.re + c.re , this.im + c.im)
 
-  override def *(c: Complex): Complex = Complex(this.re * c.re - this.im * c.im, this.re * c.im + this.im * c.re)
-
-
-}
 
 object Complex {
-  def apply(re:Double, im:Double):Complex = new ComplexImpl(re,im)
+  def apply(re:Double, im:Double):Complex = ComplexImpl(re, im)
+
+  case class ComplexImpl( re: Double,
+                          im: Double) extends Complex {
+    override def +(c: Complex): Complex = Complex(this.re + c.re , this.im + c.im)
+
+    override def *(c: Complex): Complex = Complex(this.re * c.re - this.im * c.im, this.re * c.im + this.im * c.re)
+
+
+  }
 }
 
 object TryComplex extends App {
