@@ -7,7 +7,7 @@ import u04lab.code.Lists.List._ // import custom List type (not the one in Scala
 trait Student {
   def name: String
   def year: Int
-  def enrolling(course: Course): Unit // the student participates to a Course
+  def enrolling(course: Course*): Unit // the student participates to a Course
   def courses: List[String] // names of course the student participates to
   def hasTeacher(teacher: String): Boolean // is the student participating to a course of this teacher?
 }
@@ -22,8 +22,13 @@ object Student {
   case class StudentImpl(override val name: String, override val year: Int) extends Student(){
     private var courseList: List[Course] = Nil()
 
+    def sum(args: Int*): Int = {
+      var s = 0
+      for (i <- args) { s = s + i}
+      s
+    }
+    override def enrolling(course: Course*): Unit = for(i <- course) { courseList = append(courseList,Cons(i, Nil())) }
 
-    override def enrolling(course: Course): Unit = courseList = append(courseList,Cons(course, Nil()))
 
     override def courses: List[String] = map(courseList)(x => x.name)
 
@@ -45,12 +50,16 @@ object Try extends App {
   val s1 = Student("mario",2015)
   val s2 = Student("gino",2016)
   val s3 = Student("rino") //defaults to 2017
+  val s4 = Student("pino",2016)
+
   s1.enrolling(cPPS)
   s1.enrolling(cPCD)
   s2.enrolling(cPPS)
   s3.enrolling(cPPS)
   s3.enrolling(cPCD)
   s3.enrolling(cSDR)
+  s4.enrolling(cSDR,cPCD,cPPS)
+  println(s4.courses) // true
   println(s1.courses, s2.courses, s3.courses) // (Cons(PCD,Cons(PPS,Nil())),Cons(PPS,Nil()),Cons(SDR,Cons(PCD,Cons(PPS,Nil()))))
   println(s1.hasTeacher("Ricci")) // true
 
